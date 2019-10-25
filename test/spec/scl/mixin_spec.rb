@@ -86,7 +86,7 @@ describe PoiseLanguages::Scl::Mixin do
   end # /describe #scl_package
 
   describe '#scl_folder' do
-    let(:test_provider) { provider(:poise_test).new(nil, nil) }
+    let(:test_provider) { provider(:poise_test).new(resource(:poise_test).new('test'), nil) }
     subject { test_provider.send(:scl_folder) }
     before do
       allow(test_provider).to receive(:scl_package).and_return({name: 'python34'})
@@ -96,7 +96,7 @@ describe PoiseLanguages::Scl::Mixin do
   end # /describe #scl_folder
 
   describe '#scl_environment' do
-    let(:test_provider) { provider(:poise_test).new(nil, nil) }
+    let(:test_provider) { provider(:poise_test).new(resource(:poise_test).new('test'), nil) }
     subject { test_provider.send(:scl_environment) }
     before do
       allow(test_provider).to receive(:scl_package).and_return({name: 'python34'})
@@ -114,7 +114,7 @@ describe PoiseLanguages::Scl::Mixin do
       allow(File).to receive(:exist?).with('/test/enable').and_return(true)
       allow(IO).to receive(:readlines).with('/test/enable').and_return(content.split(/\n/))
     end
-    subject { provider(:poise_test).new(nil, nil).send(:parse_enable_file, '/test/enable') }
+    subject { provider(:poise_test).new(resource(:poise_test).new('test'), nil).send(:parse_enable_file, '/test/enable') }
 
     context 'with an empty file' do
       it { is_expected.to eq({}) }
@@ -220,7 +220,7 @@ EOH
     subject { provider(:poise_test).send(:find_scl_package, chef_run.node, version) }
 
     context 'on CentOS 7 with no version' do
-      let(:chefspec_options) { {platform: 'centos', version: '7.0'} }
+      let(:chefspec_options) { {platform: 'centos', version: '7.3.1611'} }
       it do
         is_expected.to include({
           version: '3.4.2',
@@ -232,7 +232,7 @@ EOH
 
     context 'on CentOS 7 with a version' do
       let(:version) { '3.3' }
-      let(:chefspec_options) { {platform: 'centos', version: '7.0'} }
+      let(:chefspec_options) { {platform: 'centos', version: '7.3.1611'} }
       it do
         is_expected.to include({
           version: '3.3.2',
@@ -243,7 +243,7 @@ EOH
     end # /context on CentOS 7 with a version
 
     context 'on CentOS 6 with no version' do
-      let(:chefspec_options) { {platform: 'centos', version: '6.0'} }
+      let(:chefspec_options) { {platform: 'centos', version: '6.8'} }
       it do
         is_expected.to include({
           version: '3.3.2',
@@ -255,7 +255,7 @@ EOH
 
     context 'on CentOS 6 with a version' do
       let(:version) { '3.3' }
-      let(:chefspec_options) { {platform: 'centos', version: '6.0'} }
+      let(:chefspec_options) { {platform: 'centos', version: '6.8'} }
       it do
         is_expected.to include({
           version: '3.3.2',
@@ -270,7 +270,7 @@ EOH
         include described_class
         scl_package('3.4.2', 'rh-python34')
       end
-      let(:chefspec_options) { {platform: 'centos', version: '7.0'} }
+      let(:chefspec_options) { {platform: 'centos', version: '7.3.1611'} }
       it do
         is_expected.to include({
           version: '3.4.2',
